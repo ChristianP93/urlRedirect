@@ -7,7 +7,7 @@ const should = chai.should();
 
 it('Success: should post new url [GET /api/v1/url/link]', (done)=>{
   request
-    .get(SERVER_TEST + '/link?url=http://google.com/&referId=user123654&gender=m&notaType=brand&vendorId=null&productId=123456&acquiredIn=03/07/2016&geoInfo=Roma')
+    .get(SERVER_TEST + '/link?url=http%3A%2F%2Fgoogle.com/&referId=user123654&gender=m&notaType=brand&vendorId=null&productId=123456&acquiredIn=03/07/2016&geoInfo=Roma')
     .on('error', done)
     .end((err, res)=>{
       res.statusCode.should.equal(200);
@@ -50,7 +50,6 @@ it('Success: should get all url [GET /api/v1/url/link/]', (done)=>{
       response.should.have.property('result');
       response.result.should.be.instanceof(Array);
       return done();
-      // res.st;atus(302).json({'success': true,'result': result});
     });
 });
 

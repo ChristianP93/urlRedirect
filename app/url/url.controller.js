@@ -1,8 +1,12 @@
 import { Client } from '..//database/db'
 
 import pg from "pg";
-import { POSTGRES_INFO } from "../../infoDb";
+import dotenv from 'dotenv';
+dotenv.load();
+// import { POSTGRES_INFO } from "../../infoDb";
+
 import querystring from 'querystring';
+const POSTGRES_INFO = process.env.POSTGRES_INFO;
 
 export class controllerUrl{
   static async create(req, res, next) {
@@ -88,7 +92,6 @@ export class controllerUrl{
    }
 
    static async getLinkByUser(req, res, next){
-     //http://localhost:3000/api/v1/url/userId/user123654
      let result = [];
      if (!!!req.params.userId){
        res.status(400).json({'success': false,'error': 'Missing userId'});
