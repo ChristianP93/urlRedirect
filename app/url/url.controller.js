@@ -178,12 +178,12 @@ export class controllerUrl{
 
     static async getLinkByUserToBrand (req, res, next){
       //http://localhost:3000/api/v1/url/user/user123652/brand/123456745855885
-
+      next();
     }
 
     static async getLinkByUserByProduct (req, res, next){
       //http://localhost:3000/api/v1/url/user/:userId/product/:productId
-
+      next();
     }
 
 }
