@@ -4,9 +4,10 @@
 
 import express from "express";
 import bodyParser from "body-parser";
+import methodOverride from "method-override";
 import { PORT, SERVER_NAME } from "./CONFIG/properties";
 import { Client } from "./app/database/db";
-
+import 'babel-polyfill';
 // const client = Client.connect();
 const app = express();
 
@@ -14,14 +15,16 @@ const LISTENING_PORT = PORT;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(methodOverride());
+
 //API
 import { controllerUrl } from './app/url/index'
-app.get('/link', controllerUrl.create); //TODO test
-app.get('/api/v1/url/link', controllerUrl.readAll); //TODO test
-app.get('/api/v1/url/link/:urlId', controllerUrl.readSingle); //TODO test
-app.get('/api/v1/url/userId/:userId', controllerUrl.getLinkByUser); //TODO test
-app.get('/api/v1/url/product/:productId', controllerUrl.getLinkByProduct); //TODO test
-app.get('/api/v1/url/brand/:vendorId', controllerUrl.getLinkByBrand); //TODO test
+app.get('/link', controllerUrl.create);
+app.get('/api/v1/url/link', controllerUrl.readAll);
+app.get('/api/v1/url/link/:urlId', controllerUrl.readSingle);
+app.get('/api/v1/url/userId/:userId', controllerUrl.getLinkByUser);
+app.get('/api/v1/url/product/:productId', controllerUrl.getLinkByProduct);
+app.get('/api/v1/url/brand/:vendorId', controllerUrl.getLinkByBrand);
 app.get('/api/v1/url/user/:userId/brand/:brandId', controllerUrl.getLinkByUserToBrand); //TODO function and test
 app.get('/api/v1/url/user/:userId/product/:productId', controllerUrl.getLinkByUserByProduct); //TODO function and test
 

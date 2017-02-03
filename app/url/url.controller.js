@@ -2,59 +2,61 @@ import { Client } from '..//database/db'
 
 import pg from "pg";
 import { POSTGRES_INFO } from "../../infoDb";
+import querystring from 'querystring';
 
 export class controllerUrl{
   static async create(req, res, next) {
-// http://127.0.0.1:3000/link?url=http://google.com&referId=user123654&gender=m&notaType=brand&vendorId=null&productId=123456&acquiredIn=03/07/2016&geoInfo=Roma
-    let results = [];
-    let DateNow = new Date();
-    // if(!!!req.body.referId || !!!req.query.url || !!!req.body.gender || !!!req.body.notaType || !req.body.vendorId || !req.body.productId || !!!req.body.acquiredIn || !!!req.body.geoInfo) {
-    //   res.status(400).json({'success': false,'error': 'Missing att'});
-    //   return next();
-    // }
+    // http://127.0.0.1:3000/link?url=http://google.com&referId=user123654&gender=m&notaType=brand&vendorId=1&productId=null&acquiredIn=03/07/2016&geoInfo=Roma
+    // http://127.0.0.1:3000/link?url=http%3A%2F%2Fgoogle.com&referId=user123654&gender=m&notaType=brand&vendorId=1&productId=null&acquiredIn=03/07/2016&geoInfo=Roma
+
+     let results = [];
+     let DateNow = new Date();
+     if (!!!req.query.url) {
+       res.status(400).json({'success': false, 'data': 'Missing url'});
+       return next();
+     }
+
+     let url = req.query.url;
+
      pg.connect(POSTGRES_INFO, (err, client, done) => {
       if(err) {
         res.status(500).json({'success': false, 'data': err});
-        done();
         return next();
       }
       const query = client.query('INSERT INTO pg_url(refer, created, url, gender, notatype, acquiredIn, geoinfo, vendorId, productId) values($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-      [ req.query.referId, DateNow, req.query.url, req.query.gender, req.query.notaType, req.query.acquiredIn, req.query.geoInfo, req.query.vendorId, req.query.productId]);
-      // notaType: brand or product
+      [ req.query.referId, DateNow, url, req.query.gender, req.query.notaType, req.query.acquiredIn, req.query.geoInfo, req.query.vendorId, req.query.productId]);
       query.on('row', (row) => {
         results.push(row);
       });
       query.on('end', () => {
-        res.redirect(req.query.url);
-        done();
+        res.status(302).redirect(url);
         return next();
       });
     });
   }
 
   static async readAll(req, res, next){
+    // curl --request GET 'http://localhost:3000/api/v1/url/link/' -v
     // http://localhost:3000/api/v1/url/link/
     let result = [];
     pg.connect(POSTGRES_INFO, (err,client,done)=>{
       if(err){
         res.status(500).json({'success': false, 'data': err});
-        done();
         return next();
       };
       const query = client.query('SELECT * FROM pg_url ORDER BY _id ASC');
       query.on('row', (row) => {
         result.push(row);
       });
-      query.on('end', ()=>{
-        res.status(201).json({'success': true,'result': result});
-        done();
+      query.on('end', (row)=>{
+        res.status(200).json({'success': true,'result': result});
         return next();
       });
     });
   }
 
   static async readSingle(req, res, next){
-    // http://localhost:3000/api/v1/url/link/50
+    // http://localhost:3000/api/v1/url/link/185
     let result = [];
     if (!!!req.params.urlId){
       res.status(400).json({'success': false,'error': 'Missing id'});
@@ -66,7 +68,6 @@ export class controllerUrl{
      pg.connect(POSTGRES_INFO, (err, client, done)=>{
        if(err){
          res.status(500).json({'success':false, 'data':err});
-         done();
          return next();
        };
 
@@ -74,9 +75,12 @@ export class controllerUrl{
        query.on('row', (row)=>{
          result.push(row);
        });
-       query.on('end', ()=>{
+       query.on('end', (row)=>{
+         if(row.rowCount === 0) {
+           res.status(404).json({'success': false,'result': []});
+           return next();
+         }
          res.status(201).json({'success': true,'result': result});
-         done();
          return next();
        });
      });
@@ -86,7 +90,6 @@ export class controllerUrl{
    static async getLinkByUser(req, res, next){
      //http://localhost:3000/api/v1/url/userId/user123654
      let result = [];
-     let click = 0;
      if (!!!req.params.userId){
        res.status(400).json({'success': false,'error': 'Missing userId'});
         return next();
@@ -97,7 +100,6 @@ export class controllerUrl{
       pg.connect(POSTGRES_INFO, (err, client, done)=>{
         if(err){
           res.status(500).json({'success':false, 'data':err});
-          done();
           return next();
         };
 
@@ -105,9 +107,12 @@ export class controllerUrl{
         query.on('row', (row)=>{
           result.push(row);
         });
-        query.on('end', ()=>{
-          res.status(201).json({'success': true, "result": result, "click": click});
-          done();
+        query.on('end', (row)=>{
+          if(row.rowCount === 0) {
+            res.status(404).json({'success': false,'result': []});
+            return next();
+          }
+          res.status(201).json({'success': true, "result": result});
           return next();
         });
       });
@@ -115,6 +120,7 @@ export class controllerUrl{
 
     static async getLinkByProduct (req, res, next){
       //http://localhost:3000/api/v1/url/product/123456
+
       let result = [];
       if (!!!req.params.productId){
         res.status(400).json({'success': false,'error': 'Missing productId'});
@@ -123,7 +129,6 @@ export class controllerUrl{
       pg.connect(POSTGRES_INFO, (err, client,done)=>{
         if(err){
           res.status(500).json({'success':false, 'data':err});
-          done();
           return next();
         };
 
@@ -131,8 +136,14 @@ export class controllerUrl{
         query.on('row', (row)=>{
           result.push(row);
         });
-        query.on('end',()=>{
+
+        query.on('end', (row)=>{
+          if(row.rowCount === 0) {
+            res.status(404).json({'success': false,'result': []});
+            return next();
+          }
           res.status(201).json({'success': true, 'result': result})
+          return next();
         });
       });
     }
@@ -155,7 +166,11 @@ export class controllerUrl{
         query.on('row', (row)=>{
           result.push(row);
         });
-        query.on('end',()=>{
+        query.on('end', (row)=>{
+          if(row.rowCount === 0) {
+            res.status(404).json({'success': false,'result': []});
+            return next();
+          }
           res.status(201).json({'success': true, 'result': result})
         });
       });
