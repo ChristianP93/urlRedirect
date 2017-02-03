@@ -186,36 +186,4 @@ export class controllerUrl{
 
     }
 
-    //get percentuale di click maschili e femminili per brand
-    //get percentuale di click maschili e femminili per prodotto
-    //get percentuale click per citta
-
-
 }
-
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123654", "gender" : "m", "notaType": "brand", "vendorId": "null", "productId": "123457", "acquiredIn" : "02/07/2016", "geoInfo": "Milan"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.log/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123654", "gender" : "m", "notaType": "brand", "vendorId": "null", "productId": "123457", "acquiredIn" : "02/07/2016", "geoInfo": "Rome"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.log/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123654", "gender" : "m", "notaType": "brand", "vendorId": "null", "productId": "123457", "acquiredIn" : "02/07/2016", "geoInfo": "Pescara"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.log/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123654", "gender" : "m", "notaType": "brand", "vendorId": "null", "productId": "123458", "acquiredIn" : "03/08/2016", "geoInfo": "Pescara"}' http://127.0.0.1:3000/api/v1/url/link?url=mseiao.org/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123654", "gender" : "m", "notaType": "brand", "vendorId": "null", "productId": "123459", "acquiredIn" : "01/07/2016", "geoInfo": "Turin"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.org/
-
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123653", "gender" : "f", "notaType": "brand", "vendorId": "null", "productId": "123456", "acquiredIn" : "03/07/2016", "geoInfo": "Roma"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.snaf/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123653", "gender" : "f", "notaType": "brand", "vendorId": "null", "productId": "123456", "acquiredIn" : "03/08/2016", "geoInfo": "Milan"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.snaf/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123653", "gender" : "f", "notaType": "brand", "vendorId": "null", "productId": "123457", "acquiredIn" : "02/07/2016", "geoInfo": "Milan"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.log/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123653", "gender" : "f", "notaType": "brand", "vendorId": "null", "productId": "123458", "acquiredIn" : "03/08/2016", "geoInfo": "Pescara"}' http://127.0.0.1:3000/api/v1/url/link?url=mseiao.org/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123653", "gender" : "f", "notaType": "brand", "vendorId": "null", "productId": "123459", "acquiredIn" : "01/07/2016", "geoInfo": "Turin"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.org/
-
-
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123652", "gender" : "m", "notaType": "brand", "vendorId": "123456745855885", "productId": "null", "acquiredIn" : "03/07/2016", "geoInfo": "Roma"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.snaf/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123652", "gender" : "m", "notaType": "brand", "vendorId": "123457745855884", "productId": "null", "acquiredIn" : "02/09/2016", "geoInfo": "Milan"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.log/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123652", "gender" : "m", "notaType": "brand", "vendorId": "123457745855884", "productId": "null", "acquiredIn" : "02/09/2016", "geoInfo": "Pescara"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.log/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123652", "gender" : "m", "notaType": "brand", "vendorId": "123457745855884", "productId": "null", "acquiredIn" : "02/09/2016", "geoInfo": "Rome"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.log/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123652", "gender" : "m", "notaType": "brand", "vendorId": "123458745855883", "productId": "null", "acquiredIn" : "03/08/2016", "geoInfo": "Pescara"}' http://127.0.0.1:3000/api/v1/url/link?url=mseiao.org/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123652", "gender" : "m", "notaType": "brand", "vendorId": "123459745855885", "productId": "null", "acquiredIn" : "01/07/2016", "geoInfo": "Turin"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.org/
-
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123651", "gender" : "f", "notaType": "brand", "vendorId": "123456745855884", "productId": "null", "acquiredIn" : "03/07/2016", "geoInfo": "Roma"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.snaf/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123651", "gender" : "f", "notaType": "brand", "vendorId": "123456745855884", "productId": "null", "acquiredIn" : "03/07/2016", "geoInfo": "Pescara"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.snaf/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123651", "gender" : "f", "notaType": "brand", "vendorId": "123456745855884", "productId": "null", "acquiredIn" : "03/07/2016", "geoInfo": "Turin"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.snaf/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123651", "gender" : "f", "notaType": "brand", "vendorId": "123457745855883", "productId": "null", "acquiredIn" : "02/07/2016", "geoInfo": "Milan"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.log/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123651", "gender" : "f", "notaType": "brand", "vendorId": "123458745855885", "productId": "null", "acquiredIn" : "03/08/2016", "geoInfo": "Pescara"}' http://127.0.0.1:3000/api/v1/url/link?url=mseiao.org/
-// curl -H "Content-type: application/json" --data-binary '{"referId":"user123651", "gender" : "f", "notaType": "brand", "vendorId": "123459745855885", "productId": "null", "acquiredIn" : "01/07/2016", "geoInfo": "Turin"}' http://127.0.0.1:3000/api/v1/url/link?url=miao.org/
