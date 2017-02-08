@@ -4,7 +4,6 @@ import pg from "pg";
 import dotenv from 'dotenv';
 dotenv.load();
 
-import querystring from 'querystring';
 const POSTGRES_INFO = process.env.POSTGRES_INFO;
 
 export class controllerUrl{

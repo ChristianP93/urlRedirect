@@ -12,10 +12,10 @@ npm test
 
 DEV
 run client:
-npm run-script startbe;
+npm run-script startclient;
 
 run server:
-npm run-script startclient;
+npm start;
 
 
 In root folder create a file .env with connection string to Postgresql
