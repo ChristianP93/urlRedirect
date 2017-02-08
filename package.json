@@ -4,8 +4,10 @@
   "description": "miao",
   "main": "index.js",
   "scripts": {
+
     "start": "babel-node server/index.js --presets es2015,stage-2",
     "testbe": "./node_modules/.bin/mocha ./server/test --compilers js:babel-core/register ",
+    "startclient": "cd app && tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "test": "cd ./app && karma start",
     "lite": "lite-server",
     "tsc": "tsc",
