@@ -3,3 +3,5 @@ npm-debug.log
 infoDb.js
 coverage
 .env
+app/**/*.js
+app/**/*.js.map

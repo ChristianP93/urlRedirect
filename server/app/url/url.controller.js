@@ -3,7 +3,6 @@ import { Client } from '..//database/db'
 import pg from "pg";
 import dotenv from 'dotenv';
 dotenv.load();
-// import { POSTGRES_INFO } from "../../infoDb";
 
 import querystring from 'querystring';
 const POSTGRES_INFO = process.env.POSTGRES_INFO;
