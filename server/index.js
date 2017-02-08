@@ -1,14 +1,12 @@
 'use strict';
 
-// var babel = require("babel-core");
-
 import express from "express";
 import bodyParser from "body-parser";
+import path from "path";
 import methodOverride from "method-override";
 import { PORT, SERVER_NAME } from "./CONFIG/properties";
 import { Client } from "./app/database/db";
 import 'babel-polyfill';
-// const client = Client.connect();
 const app = express();
 
 const LISTENING_PORT = PORT;
@@ -16,6 +14,10 @@ const LISTENING_PORT = PORT;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
+
+app.use(require('serve-favicon')(path.join(__dirname,"..","app","favicon.ico")));
+app.use('/', express.static(path.join(__dirname, '..', 'app')));
+app.use('/node_modules', express.static(path.join(__dirname, '..', 'node_modules')));
 
 //API
 import { controllerUrl } from './app/url/index'
@@ -33,7 +35,6 @@ const ServerListening = (req, res, next) => {
     console.log(SERVER_NAME + " [listening on port: " + LISTENING_PORT + "].");
 };
 
-
 const server = app.listen(LISTENING_PORT, ServerListening);
 
 process.on( 'SIGINT', () => {
@@ -41,10 +42,6 @@ process.on( 'SIGINT', () => {
     console.log('Shutting down server');
     server.close();
   }
-  // if (client) {
-  //   console.log('Shutting down connection with postgres');
-  //   Client.end();
-  // }
   return process.exit();
 });
 
