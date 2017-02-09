@@ -23,12 +23,11 @@ export class controllerAuth{
    for (var i = 0; i < 15; i++) {
      token += possible.charAt(Math.floor(Math.random() * possible.length))
    }
-
    pg.connect(POSTGRES_INFO, (err, client, done) => {
      const query = client.query('SELECT * FROM users ORDER BY _id ASC');
      query.on('row', (row) => {
        if(row.mail === req.body.user.mail ){
-         result = 1
+         result = 1;
        }
      });
 
