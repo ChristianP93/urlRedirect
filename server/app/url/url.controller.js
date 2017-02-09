@@ -4,7 +4,6 @@ import pg from "pg";
 import dotenv from 'dotenv';
 dotenv.load();
 
-import querystring from 'querystring';
 const POSTGRES_INFO = process.env.POSTGRES_INFO;
 
 export class controllerUrl{
@@ -39,7 +38,7 @@ export class controllerUrl{
   }
 
   static async readAll(req, res, next){
-    // curl --request GET 'http://localhost:3000/api/v1/url/link/' -v
+    // curl --request GET 'http://localhost:3000/api/v1/url/link/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
     // http://localhost:3000/api/v1/url/link/
     let result = [];
     pg.connect(POSTGRES_INFO, (err,client,done)=>{
@@ -59,6 +58,7 @@ export class controllerUrl{
   }
 
   static async readSingle(req, res, next){
+    // curl --request GET 'http://localhost:3000/api/v1/url/link/185' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
     // http://localhost:3000/api/v1/url/link/185
     let result = [];
     if (!!!req.params.urlId){
@@ -122,7 +122,7 @@ export class controllerUrl{
 
     static async getLinkByProduct (req, res, next){
       //http://localhost:3000/api/v1/url/product/123456
-
+      // curl --request GET 'http://localhost:3000/api/v1/url/product/123456' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
       let result = [];
       if (!!!req.params.productId){
         res.status(400).json({'success': false,'error': 'Missing productId'});
@@ -152,6 +152,8 @@ export class controllerUrl{
 
     static async getLinkByBrand (req, res, next){
       //http://localhost:3000/api/v1/url/brand/123456745855885
+      // curl --request GET 'http://localhost:3000/api/v1/url/brand/123456745855885' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+
       let result = [];
       if (!!!req.params.vendorId){
         res.status(400).json({'success': false,'error': 'Missing brand'});
@@ -180,11 +182,15 @@ export class controllerUrl{
 
     static async getLinkByUserToBrand (req, res, next){
       //http://localhost:3000/api/v1/url/user/user123652/brand/123456745855885
+      // curl --request GET 'http://localhost:3000/api/v1/url/user/user123652/brand/123456745855885' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+
       next();
     }
 
     static async getLinkByUserByProduct (req, res, next){
       //http://localhost:3000/api/v1/url/user/:userId/product/:productId
+      // curl --request GET 'http://localhost:3000/api/v1/url/user/user123652/:productId' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+
       next();
     }
 
