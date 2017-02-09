@@ -1,11 +1,8 @@
 'use strict';
 import pg from "pg";
 import dotenv from 'dotenv';
-import passport from 'passport'
-import Bearer from 'passport-http-bearer';
 import bcrypt from 'bcrypt-nodejs';
 
-const BearerStrategy = Bearer.Strategy;
 dotenv.load();
 const POSTGRES_INFO = process.env.POSTGRES_INFO;
 
@@ -58,11 +55,11 @@ export class controllerAuth{
       });
     });
    });
-
-  }
+ };
 
   static async getToken(req, res, next) {
    // curl --request GET --header "Content-Type: application/json" 'http://localhost:3000/get/token/' --data-binary '{"user": {"mail":"christianpengu@gmail.com","password":"miao"}}'
+    let token = false;
     let response = false;
     if(!!!req.body.user){
       res.status(400).json({'success': false, 'data': 'Missing user'});
@@ -73,37 +70,16 @@ export class controllerAuth{
       const query = client.query('SELECT * FROM users ORDER BY _id ASC');
       query.on('row', (row) => {
         if(row.mail === req.body.user.mail ){
-          response = row;
+          response = bcrypt.compareSync(req.body.user.password, row.password);
+          token = row.token;
         }
       });
 
       query.on('end', () => {
-        if (response === false) {
-          res.status(400).json({'success': false, 'err': 'user not found!'});
-          return next();
-        } else {
-          console.log('res'); //TODO no status
-
-          bcrypt.compare(req.body.user.password, response.password, function(err, find) {
-            console.log('res'); //TODO res 404
-            console.log(find);
-            if(find === true) {
-              console.log('tererer');
-              res.status(200).json({'success': true, 'token': response.token});
-              return next();
-            }else{
-              res.status(400).json({'success': false, 'response': 'wrong password'});
-              return next();
-            }
-          });
-          return next();
-        }
-
+        response === true ? res.status(200).json({'success': true, 'token': token}) : res.status(400).json({'success': false, 'response': 'wrong password'});
+        return next();
       });
-
     });
-
-  }
-
+  };
 
 }

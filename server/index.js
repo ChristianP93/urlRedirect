@@ -7,6 +7,8 @@ import methodOverride from "method-override";
 import { PORT, SERVER_NAME } from "./CONFIG/properties";
 import { Client } from "./app/database/db";
 import passport from 'passport';
+import  auth  from './app/auth/auth';
+
 import 'babel-polyfill';
 const app = express();
 
@@ -29,13 +31,13 @@ app.get('/get/token', controllerAuth.getToken);
 
 
 app.get('/link', controllerUrl.create);
-app.get('/api/v1/url/link', controllerUrl.readAll);
-app.get('/api/v1/url/link/:urlId', controllerUrl.readSingle);
-app.get('/api/v1/url/userId/:userId', controllerUrl.getLinkByUser);
-app.get('/api/v1/url/product/:productId', controllerUrl.getLinkByProduct);
-app.get('/api/v1/url/brand/:vendorId', controllerUrl.getLinkByBrand);
-app.get('/api/v1/url/user/:userId/brand/:brandId', controllerUrl.getLinkByUserToBrand); //TODO function and test
-app.get('/api/v1/url/user/:userId/product/:productId', controllerUrl.getLinkByUserByProduct); //TODO function and test
+app.get('/api/v1/url/link', auth.bearer(), controllerUrl.readAll);
+app.get('/api/v1/url/link/:urlId', auth.bearer(),controllerUrl.readSingle);
+app.get('/api/v1/url/userId/:userId', auth.bearer(),controllerUrl.getLinkByUser);
+app.get('/api/v1/url/product/:productId', auth.bearer(),controllerUrl.getLinkByProduct);
+app.get('/api/v1/url/brand/:vendorId', auth.bearer(),controllerUrl.getLinkByBrand);
+app.get('/api/v1/url/user/:userId/brand/:brandId', auth.bearer(),controllerUrl.getLinkByUserToBrand); //TODO function and test
+app.get('/api/v1/url/user/:userId/product/:productId', auth.bearer(), controllerUrl.getLinkByUserByProduct); //TODO function and test
 
 
 const ServerListening = (req, res, next) => {
