@@ -9,8 +9,8 @@ import { User } from './user';
     selector: 'ng-login',
     providers: [LoginService],
     templateUrl: './app/login/template/login.template.html'
-
 })
+
 export class NgLoginComponent {
     errorMessage: string;
     user: User[];

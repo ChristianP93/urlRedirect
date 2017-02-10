@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, RequestOptions, URLSearchParams} from '@angular/http';
+import { Headers, RequestOptions} from '@angular/http';
 import { Http, Response }          from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -9,14 +9,22 @@ import { User } from './user';
 
 @Injectable()
 export class LoginService {
-    private loginUrl = 'http://localhost:3000/api/v1/';  // URL to web API
+    private server = 'http://localhost:3000/api/v1/';  // URL to web API
 
     constructor(private http: Http) { }
 
     loginUser(user: Object): Observable<User[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.loginUrl + 'get/token/', user, options)
+        return this.http.post(this.server + 'get/token/', user, options)
+            .map(resp => this.extractData(resp))
+            .catch(err => this.handleError(err));
+    }
+
+    createUser(user: Object): Observable<User[]> {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this.http.post(this.server + 'user/create/', user, options)
             .map(resp => this.extractData(resp))
             .catch(err => this.handleError(err));
     }
