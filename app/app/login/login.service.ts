@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, RequestOptions } from '@angular/http';
+import { Headers, RequestOptions, URLSearchParams} from '@angular/http';
 import { Http, Response }          from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -16,15 +16,16 @@ export class LoginService {
     loginUser(user: Object): Observable<User[]> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        // TODO params user
-        return this.http.get(this.loginUrl + 'get/token/', user).map(this.extractData).catch(this.handleError);
-
+        return this.http.post(this.loginUrl + 'get/token/', user, options)
+            .map(resp => this.extractData(resp))
+            .catch(err => this.handleError(err));
     }
 
     private extractData(res: Response) {
         let body = res.json();
-        return body.data || {};
+        return body || {};
     }
+
     private handleError(error: Response | any) {
         // In a real world app, we might use a remote logging infrastructure
         let errMsg: string;

@@ -8,28 +8,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var platform_browser_1 = require('@angular/platform-browser');
-var forms_1 = require('@angular/forms');
-var http_1 = require('@angular/http');
-var app_component_1 = require('./app.component');
-var home_component_1 = require('./home/home.component');
-var login_component_1 = require('./login/login.component');
-var login_service_1 = require('./login/login.service');
-var app_routing_module_1 = require('./app.routing.module');
+var core_1 = require("@angular/core");
+var platform_browser_1 = require("@angular/platform-browser");
+var forms_1 = require("@angular/forms");
+var http_1 = require("@angular/http");
+var common_1 = require("@angular/common");
+var app_component_1 = require("./app.component");
+var home_component_1 = require("./home/home.component");
+var login_component_1 = require("./login/login.component");
+var login_service_1 = require("./login/login.service");
+var app_routing_module_1 = require("./app.routing.module");
 var AppModule = (function () {
-    function AppModule() {
+    function AppModule(location) {
+        this.location = location;
     }
-    AppModule = __decorate([
-        core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule, app_routing_module_1.routing, forms_1.FormsModule, http_1.HttpModule, http_1.JsonpModule],
-            declarations: [app_component_1.AppComponent, home_component_1.NgHomeComponent, login_component_1.NgLoginComponent],
-            providers: [login_service_1.LoginService],
-            bootstrap: [app_component_1.AppComponent]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], AppModule);
     return AppModule;
 }());
+AppModule = __decorate([
+    core_1.NgModule({
+        imports: [platform_browser_1.BrowserModule, app_routing_module_1.routing, forms_1.FormsModule, http_1.HttpModule, http_1.JsonpModule],
+        declarations: [app_component_1.AppComponent, home_component_1.NgHomeComponent, login_component_1.NgLoginComponent],
+        providers: [common_1.Location, { provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy }, login_service_1.LoginService],
+        bootstrap: [app_component_1.AppComponent]
+    }),
+    __metadata("design:paramtypes", [common_1.Location])
+], AppModule);
 exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginService } from './login.service';
-// import { User } from './user';
+
 
 @Component({
     selector: 'ng-login',
@@ -14,15 +14,24 @@ export class NgLoginComponent {
     user = {
         'mail': '',
         'password': ''
-    }
+    };
     token: string;
 
     constructor(private loginService: LoginService) { }
 
     onSubmit(user: Object) {
         console.log(user);
-        this.loginService.loginUser(user).subscribe(
-            token => token = (token),
+        let userToken: any;
+        this.loginService.loginUser({ 'user': user }).subscribe(
+            token => {
+                console.log(token);
+                console.log(token.token);
+                console.log(localStorage);
+                userToken = (token.token);
+                localStorage.setItem('token', userToken);
+                // return window.location('/home');
+
+            },
             error => this.errorMessage = <any>error
         );
     }
