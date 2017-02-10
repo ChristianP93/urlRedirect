@@ -1,15 +1,16 @@
-<div class="container">
-    <h1>LOGIN</h1>
-    <form (ngSubmit)="onSubmit(mail, password)" #userForm="ngForm">
+  <div class="container">
+    <h1>CREATE ACCOUNT</h1>
+    <form (ngSubmit)="onSubmit(mail, password)" #newUserForm="ngForm">
       <div class="form-group">
         <label for="mail">Mail</label>
         <input type="text" class="form-control" id="mail" required [(ngModel)]="this.mail" name="mail">
       </div>
+      {{this.error}}
       <div class="form-group">
         <label for="password">Password</label>
         <input type="password" class="form-control" id="password" required [(ngModel)]="this.password" name="password">
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!userForm.form.valid">Submit</button>
+      <button type="submit" class="btn btn-success" [disabled]="!newUserForm.form.valid">Submit</button>
     </form>
-    <span>Or <a href="/#/create/account">create new user</a></span>
+    <span>Or <a href="/#/login"> Login </a></span>
 </div>

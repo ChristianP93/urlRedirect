@@ -8,6 +8,7 @@ import { HashLocationStrategy, Location, LocationStrategy } from '@angular/commo
 import { AppComponent } from './app.component';
 import { NgHomeComponent }  from './home/home.component';
 import { NgLoginComponent }  from './login/login.component';
+import { NgCreateAccountComponent }  from './createAccount/createAccount.component';
 import { LoginService } from './login/login.service';
 import { routing } from './app.routing.module';
 
@@ -17,7 +18,7 @@ import { routing } from './app.routing.module';
 
 @NgModule({
     imports: [BrowserModule, routing, FormsModule, HttpModule, JsonpModule],
-    declarations: [AppComponent, NgHomeComponent, NgLoginComponent],
+    declarations: [AppComponent, NgHomeComponent, NgLoginComponent, NgCreateAccountComponent],
     providers: [Location, { provide: LocationStrategy, useClass: HashLocationStrategy }, LoginService],
     bootstrap: [AppComponent]
 })
