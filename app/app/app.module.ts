@@ -18,7 +18,6 @@ import { routing } from './app.routing.module';
 @NgModule({
     imports: [BrowserModule, routing, FormsModule, HttpModule, JsonpModule],
     declarations: [AppComponent, NgHomeComponent, NgLoginComponent],
-    // providers: [],
     providers: [Location, { provide: LocationStrategy, useClass: HashLocationStrategy }, LoginService],
     bootstrap: [AppComponent]
 })

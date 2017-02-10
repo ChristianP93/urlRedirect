@@ -59,8 +59,6 @@ export class controllerAuth{
    // curl --request GET --header "Content-Type: application/json" 'http://localhost:3000/get/token/' --data-binary '{"user": {"mail":"christianpengu@gmail.com","password":"miao"}}'
     let token = false;
     let response = false;
-    console.log(req.body);
-
     if(!!!req.body.user){
       res.status(400).json({'success': false, 'data': 'Missing user'});
       return next();

@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LoginService } from './login.service';
+import { Router } from '@angular/router';
+
+import { User } from './user';
 
 
 @Component({
@@ -10,27 +13,20 @@ import { LoginService } from './login.service';
 })
 export class NgLoginComponent {
     errorMessage: string;
-    // user: User[];
-    user = {
-        'mail': '',
-        'password': ''
-    };
-    token: string;
+    user: User[];
 
-    constructor(private loginService: LoginService) { }
+    @Input() mail: string;
+    @Input() password: string;
 
-    onSubmit(user: Object) {
-        console.log(user);
-        let userToken: any;
-        this.loginService.loginUser({ 'user': user }).subscribe(
-            token => {
-                console.log(token);
-                console.log(token.token);
-                console.log(localStorage);
-                userToken = (token.token);
+    constructor(private loginService: LoginService, private router: Router) { }
+
+    onSubmit(mail: string, password: string) {
+        let userData: Object = { 'user': { 'mail': this.mail, 'password': this.password } };
+        this.loginService.loginUser(userData).subscribe(
+            (data: any) => {
+                let userToken: string = (data.token);
                 localStorage.setItem('token', userToken);
-                // return window.location('/home');
-
+                return this.router.navigate(['home']);
             },
             error => this.errorMessage = <any>error
         );
