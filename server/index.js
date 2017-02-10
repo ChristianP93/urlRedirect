@@ -29,13 +29,6 @@ import { controllerAuth } from './app/auth/index'
 app.post('/api/v1/user/create', controllerAuth.createUser);
 app.post('/api/v1/get/token', controllerAuth.getToken);
 
-// app.get('/:route', ( req, res, next) => {
-//   console.log('miao');
-//  if( ['api', 'link'].indexOf(req.params.route) === -1){
-//    res.location('/#/'+req.params.route);
-//  }
-//  return next();
-// });
 app.get('/link', controllerUrl.create);
 app.get('/api/v1/url/link', auth.bearer(), controllerUrl.readAll);
 app.get('/api/v1/url/link/:urlId', auth.bearer(),controllerUrl.readSingle);

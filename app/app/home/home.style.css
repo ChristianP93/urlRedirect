@@ -1,0 +1,19 @@
+.blockHomeLabel{
+  text-align: center;
+  cursor:pointer;
+  margin-top:2em;
+  width: 100%;
+}
+
+.blockHome{
+  height: 25vh;
+  cursor:pointer;
+  border: 2px groove;
+}
+
+.blockHomeImg{
+  width: 90px;
+  left: 50%;
+  position: absolute;
+  margin-left: -45px;
+}
