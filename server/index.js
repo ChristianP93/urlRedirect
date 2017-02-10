@@ -26,10 +26,16 @@ app.use('/node_modules', express.static(path.join(__dirname, '..', 'node_modules
 //API
 import { controllerUrl } from './app/url/index'
 import { controllerAuth } from './app/auth/index'
-app.post('/user/create', controllerAuth.createUser);
-app.get('/get/token', controllerAuth.getToken);
+app.post('/api/v1/user/create', controllerAuth.createUser);
+app.post('/api/v1/get/token', controllerAuth.getToken);
 
-
+// app.get('/:route', ( req, res, next) => {
+//   console.log('miao');
+//  if( ['api', 'link'].indexOf(req.params.route) === -1){
+//    res.location('/#/'+req.params.route);
+//  }
+//  return next();
+// });
 app.get('/link', controllerUrl.create);
 app.get('/api/v1/url/link', auth.bearer(), controllerUrl.readAll);
 app.get('/api/v1/url/link/:urlId', auth.bearer(),controllerUrl.readSingle);
