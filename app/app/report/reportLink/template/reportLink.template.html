@@ -15,7 +15,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor='let report of reports'>
+      <!-- <tr class="cursorPointer" *ngFor='let report of (reports | noRepeat)' (click)="showDetails(report.refer)"> -->
+      <tr class="cursorPointer" *ngFor='let report of reports' (click)="showDetails(report.refer)">
         <td class="rowTableReportLink">{{report._id}} </td>
         <td class="rowTableReportLink">{{report.refer}} </td>
         <td class="rowTableReportLink">{{report.created | date: 'dd/MM/yyyy'}} </td>
@@ -24,8 +25,8 @@
         <td class="rowTableReportLink">{{report.notatype}} </td>
         <td class="rowTableReportLink">{{report.acquiredIn | date: 'dd/MM/yyyy'}} </td>
         <td class="rowTableReportLink">{{report.geoinfo}} </td>
-        <td class="rowTableReportLink">{{report.vendorId}} </td>
-        <td class="rowTableReportLink">{{report.productId}} </td>
+        <td class="rowTableReportLink">{{report.vendorid}} </td>
+        <td class="rowTableReportLink">{{report.productid}} </td>
       </tr>
     </tbody>
   </table>

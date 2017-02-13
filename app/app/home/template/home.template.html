@@ -6,21 +6,52 @@
     </div>
   </a>
   <a href="#/home">
-    <div class="blockHome col-xs-3 col-sm-3 col-md-3 col-lg-3">
-      <label class="blockHomeLabel"> Get Report link by user</label>
+    <div class="blockHome col-xs-3 col-sm-3 col-md-3 col-lg-3" (click)="user.open()">
+      <label class="blockHomeLabel" > Get Report link by user</label>
       <img class="blockHomeImg" src="https://c1.staticflickr.com/2/1482/24588096069_59a0513790_z.jpg" alt="" />
     </div>
   </a>
   <a href="#/home">
-    <div class="blockHome col-xs-3 col-sm-3 col-md-3 col-lg-3">
+    <div class="blockHome col-xs-3 col-sm-3 col-md-3 col-lg-3" (click)="product.open()">
       <label class="blockHomeLabel">Get Report link by Product</label>
       <img class="blockHomeImg" src="https://c1.staticflickr.com/2/1482/24588096069_59a0513790_z.jpg" alt="" />
     </div>
   </a>
   <a href="#/home">
-    <div class="blockHome col-xs-3 col-sm-3 col-md-3 col-lg-3">
+    <div class="blockHome col-xs-3 col-sm-3 col-md-3 col-lg-3" (click)="brand.open()">
       <label class="blockHomeLabel">Get Report link by Brand</label>
       <img class="blockHomeImg" src="https://c1.staticflickr.com/2/1482/24588096069_59a0513790_z.jpg" alt="" />
     </div>
   </a>
 </div>
+<!-- <button type="button" class="btn btn-default" (click)="modal.open()">Open me!</button> -->
+
+<modal #user>
+  <modal-header [show-close]="true">
+      <h4 class="modal-title">Cerca Per Utente</h4>
+  </modal-header>
+  <modal-body>
+      user
+  </modal-body>
+  <modal-footer [show-default-buttons]="true"></modal-footer>
+</modal>
+
+<modal #product>
+  <modal-header [show-close]="true">
+      <h4 class="modal-title">Cerca Per Prodotto</h4>
+  </modal-header>
+  <modal-body>
+      product
+  </modal-body>
+  <modal-footer [show-default-buttons]="true"></modal-footer>
+</modal>
+
+<modal #brand>
+  <modal-header [show-close]="true">
+      <h4 class="modal-title">Cerca Per Brand</h4>
+  </modal-header>
+  <modal-body>
+      brand
+  </modal-body>
+  <modal-footer [show-default-buttons]="true"></modal-footer>
+</modal>

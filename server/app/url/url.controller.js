@@ -37,7 +37,7 @@ export class controllerUrl{
     });
   }
 
-  static async readAll(req, res, next){
+  static async readAll(req, res, next){   //TODO dopo 5 chiamate l'api non risponde piu
     // curl --request GET 'http://localhost:3000/api/v1/url/link/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
     // http://localhost:3000/api/v1/url/link/
     let result = [];
@@ -45,6 +45,7 @@ export class controllerUrl{
     pg.connect(POSTGRES_INFO, (err,client,done)=>{
       if(err){
         res.status(500).json({'success': false, 'data': err});
+        done();
         return next();
       };
       const query = client.query('SELECT * FROM pg_url ORDER BY _id ASC');
@@ -53,6 +54,7 @@ export class controllerUrl{
       });
       query.on('end', (row)=>{
         res.status(200).json({'success': true,'result': result});
+        done();
         return next();
       });
     });
@@ -92,13 +94,15 @@ export class controllerUrl{
    }
 
    static async getLinkByUser(req, res, next){
+    //  user123654
+     // curl --request GET 'http://localhost:3000/api/v1/url/userId/user123456' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
      let result = [];
      if (!!!req.params.userId){
        res.status(400).json({'success': false,'error': 'Missing userId'});
         return next();
       }
 
-      let urlId = [req.params.userId];
+      let usrId = req.params.userId;
 
       pg.connect(POSTGRES_INFO, (err, client, done)=>{
         if(err){
@@ -106,7 +110,7 @@ export class controllerUrl{
           return next();
         };
 
-      const query=client.query('SELECT * FROM pg_url WHERE refer=($1)', urlId);
+      const query=client.query('SELECT * FROM pg_url WHERE refer=($1)', [usrId]);
         query.on('row', (row)=>{
           result.push(row);
         });

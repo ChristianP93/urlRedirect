@@ -21,6 +21,7 @@ it('Error: should post new url [GET /api/v1/url/link]', (done)=>{
   request
     .get(SERVER_TEST + '/link?ur=http://google.com&referId=user123654&gender=m&notaType=brand&vendorId=null&productId=123456&acquiredIn=03/07/2016&geoInfo=Roma')
     .on('error', (res)=>{
+      console.log(res);
       let response = JSON.parse(res.response.text);
       res.status.should.equal(400);
       res.should.be.json;
