@@ -1,7 +1,7 @@
-import { Route } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { NgReportLinkComponent } from './reportLink.component';
 
-export const ngReportLinkRoute: Route = [
+export const ngReportLinkRoute: Routes = [
     { path: 'reportLink', component: NgReportLinkComponent }
 ];

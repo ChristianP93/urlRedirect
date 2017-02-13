@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Headers, RequestOptions} from '@angular/http';
-import { Http, Response }          from '@angular/http';
+import { Headers, RequestOptions } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -11,17 +11,21 @@ import { Report } from './report';
 export class ReportService {
     private server = 'http://localhost:3000/api/v1/';
     private token = localStorage.getItem('token');
-
+    private headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token });
+    private options = new RequestOptions({ headers: this.headers });
     constructor(private http: Http) { }
 
     getReportLink(): Observable<Report[]> {
-        let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token });
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.server + 'url/link/', options)
-            .map(resp => {
-                return this.extractData(resp);
-            })
-            .catch(err => this.handleError(err));
+        return this.http.get(this.server + 'url/link/', this.options)
+            .map(res => {
+                return this.extractData(res);
+            }).catch(err => this.handleError(err));
+    }
+
+    getLinkByUser(params: any): Observable<Report[]> {
+        return this.http.get(this.server + 'url/userId/' + params.id, this.options).map(res => {
+            return this.extractData(res);
+        }).catch(err => this.handleError(err));
     }
 
     private extractData(res: Response) {
@@ -30,7 +34,6 @@ export class ReportService {
     }
 
     private handleError(error: Response | any) {
-        // In a real world app, we might use a remote logging infrastructure
         let errMsg: string;
         if (error instanceof Response) {
             const body = error.json() || '';

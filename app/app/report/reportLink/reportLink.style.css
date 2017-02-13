@@ -2,3 +2,7 @@
   line-height: 3em;
   vertical-align: middle;
 }
+
+.cursorPointer{
+  cursor: pointer;
+}
