@@ -1,0 +1,32 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th class="rowTableReportLink">_id</th>
+        <th class="rowTableReportLink">refer</th>
+        <th class="rowTableReportLink">created</th>
+        <th class="rowTableReportLink">url</th>
+        <th class="rowTableReportLink">gender</th>
+        <th class="rowTableReportLink">notatype</th>
+        <th class="rowTableReportLink">acquiredIn</th>
+        <th class="rowTableReportLink">geoinfo</th>
+        <th class="rowTableReportLink">vendorId</th>
+        <th class="rowTableReportLink">productId</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor='let report of reports'>
+        <td class="rowTableReportLink">{{report._id}} </td>
+        <td class="rowTableReportLink">{{report.refer}} </td>
+        <td class="rowTableReportLink">{{report.created | date: 'dd/MM/yyyy'}} </td>
+        <td class="rowTableReportLink">{{report.url}} </td>
+        <td class="rowTableReportLink">{{report.gender}} </td>
+        <td class="rowTableReportLink">{{report.notatype}} </td>
+        <td class="rowTableReportLink">{{report.acquiredIn | date: 'dd/MM/yyyy'}} </td>
+        <td class="rowTableReportLink">{{report.geoinfo}} </td>
+        <td class="rowTableReportLink">{{report.vendorId}} </td>
+        <td class="rowTableReportLink">{{report.productId}} </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
