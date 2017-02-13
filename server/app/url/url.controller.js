@@ -41,6 +41,7 @@ export class controllerUrl{
     // curl --request GET 'http://localhost:3000/api/v1/url/link/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
     // http://localhost:3000/api/v1/url/link/
     let result = [];
+    console.log('readALl');
     pg.connect(POSTGRES_INFO, (err,client,done)=>{
       if(err){
         res.status(500).json({'success': false, 'data': err});

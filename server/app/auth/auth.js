@@ -35,7 +35,6 @@ passport.use('bearer', new BearerStrategy(
       });
 
       query.on('end', () => {
-        console.log(user);
         if (response) {
           return next(null, user);
         }else{
