@@ -16,7 +16,7 @@
     </thead>
     <tbody>
       <!-- <tr class="cursorPointer" *ngFor='let report of (reports | noRepeat)' (click)="showDetails(report.refer)"> -->
-      <tr class="cursorPointer" *ngFor='let report of reports' (click)="showDetails(report.refer)">
+      <tr class="cursorPointer" *ngFor='let report of reports' (click)="showDetails()">
         <td class="rowTableReportLink">{{report._id}} </td>
         <td class="rowTableReportLink">{{report.refer}} </td>
         <td class="rowTableReportLink">{{report.created | date: 'dd/MM/yyyy'}} </td>

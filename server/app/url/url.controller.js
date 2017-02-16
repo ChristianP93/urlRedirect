@@ -1,5 +1,3 @@
-import { Client } from '..//database/db'
-
 import pg from "pg";
 import dotenv from 'dotenv';
 dotenv.load();
@@ -9,7 +7,7 @@ const POSTGRES_INFO = process.env.POSTGRES_INFO;
 export class controllerUrl{
   static async create(req, res, next) {
     // http://127.0.0.1:3000/link?url=http://google.com&referId=user123654&gender=m&notaType=brand&vendorId=1&productId=null&acquiredIn=03/07/2016&geoInfo=Roma
-    // http://127.0.0.1:3000/link?url=http%3A%2F%2Fgoogle.com&referId=user123654&gender=m&notaType=brand&vendorId=1&productId=null&acquiredIn=03/07/2016&geoInfo=Roma
+    // http://127.0.0.1:3000/link?url=http%3A%2F%2Fgoogle.com&referId=user123657&gender=m&notaType=brand&vendorId=1&productId=null&acquiredIn=03/07/2016&geoInfo=Roma
 
      let results = [];
      let DateNow = new Date();
@@ -32,17 +30,22 @@ export class controllerUrl{
       });
       query.on('end', () => {
         res.status(302).redirect(url);
+        done();
+
         return next();
       });
     });
+
   }
 
-  static async readAll(req, res, next){   //TODO dopo 5 chiamate l'api non risponde piu
+  static async readAll(req, res, next){
     // curl --request GET 'http://localhost:3000/api/v1/url/link/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
     // http://localhost:3000/api/v1/url/link/
     let result = [];
     console.log('readALl');
     pg.connect(POSTGRES_INFO, (err,client,done)=>{
+      console.log('miao');
+
       if(err){
         res.status(500).json({'success': false, 'data': err});
         done();
@@ -66,7 +69,7 @@ export class controllerUrl{
     let result = [];
     if (!!!req.params.urlId){
       res.status(400).json({'success': false,'error': 'Missing id'});
-       return next();
+      return next();
      }
 
      let urlId = [req.params.urlId];
@@ -74,6 +77,7 @@ export class controllerUrl{
      pg.connect(POSTGRES_INFO, (err, client, done)=>{
        if(err){
          res.status(500).json({'success':false, 'data':err});
+         done();
          return next();
        };
 
@@ -84,9 +88,11 @@ export class controllerUrl{
        query.on('end', (row)=>{
          if(row.rowCount === 0) {
            res.status(404).json({'success': false,'result': []});
+           done();
            return next();
          }
          res.status(201).json({'success': true,'result': result});
+         done();
          return next();
        });
      });
@@ -107,6 +113,7 @@ export class controllerUrl{
       pg.connect(POSTGRES_INFO, (err, client, done)=>{
         if(err){
           res.status(500).json({'success':false, 'data':err});
+          done();
           return next();
         };
 
@@ -117,9 +124,11 @@ export class controllerUrl{
         query.on('end', (row)=>{
           if(row.rowCount === 0) {
             res.status(404).json({'success': false,'result': []});
+            done();
             return next();
           }
           res.status(201).json({'success': true, "result": result});
+          done();
           return next();
         });
       });
@@ -136,6 +145,7 @@ export class controllerUrl{
       pg.connect(POSTGRES_INFO, (err, client,done)=>{
         if(err){
           res.status(500).json({'success':false, 'data':err});
+          done();
           return next();
         };
 
@@ -147,9 +157,11 @@ export class controllerUrl{
         query.on('end', (row)=>{
           if(row.rowCount === 0) {
             res.status(404).json({'success': false,'result': []});
+            done();
             return next();
           }
           res.status(201).json({'success': true, 'result': result})
+          done();
           return next();
         });
       });
@@ -178,9 +190,12 @@ export class controllerUrl{
         query.on('end', (row)=>{
           if(row.rowCount === 0) {
             res.status(404).json({'success': false,'result': []});
+            done();
             return next();
           }
           res.status(201).json({'success': true, 'result': result})
+          done();
+          return next();
         });
       });
     }
