@@ -25,8 +25,8 @@ export class NgReportLinkComponent implements OnInit {
         });
     }
 
-    showDetails(param: string) {
-        return this.router.navigate(['reportLink/' + param]);
+    showDetails() {
+        return this.router.navigate(['graph']);
     }
 
 }

@@ -6,6 +6,7 @@ import { ngHomeRoute } from './home/home.route';
 import { ngCreateAccountRoute } from './createAccount/createAccount.route';
 import { ngReportLinkRoute } from './report/reportLink/report.route';
 import { ngReportLinkUserRoute } from './report/reportLinkUser/reportLinkUser.route';
+import { BarChartDemoRoute } from './report/graph/graph.router';
 
 const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -13,7 +14,8 @@ const routes: Routes = [
     ...ngHomeRoute,
     ...ngCreateAccountRoute,
     ...ngReportLinkRoute,
-    ...ngReportLinkUserRoute
+    ...ngReportLinkUserRoute,
+    ...BarChartDemoRoute
     // ...createProjectRoute
 ];
 
