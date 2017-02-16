@@ -15,6 +15,7 @@ import { BarChartDemoComponent } from './report/graph/graph.component';
 
 import { LoginService } from './login/login.service';
 import { ReportService } from './report/report.service';
+import { HomeService } from './home/home.service';
 
 import { routing } from './app.routing.module';
 
@@ -35,7 +36,7 @@ import { NoRepeatPipe } from './filterPipe/noRepeat.pipe';
     imports: [BrowserModule, routing, FormsModule, HttpModule, JsonpModule, Ng2Bs3ModalModule, ChartsModule],
     declarations: [AppComponent, NgHomeComponent, NgLoginComponent, NgCreateAccountComponent, NgInit, NgReportLinkComponent,
         NgReportLinkUserComponent, NoRepeatPipe, BarChartDemoComponent],
-    providers: [Location, { provide: LocationStrategy, useClass: HashLocationStrategy }, LoginService, ReportService],
+    providers: [Location, { provide: LocationStrategy, useClass: HashLocationStrategy }, LoginService, ReportService, HomeService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

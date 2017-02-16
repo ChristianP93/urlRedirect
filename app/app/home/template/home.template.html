@@ -31,7 +31,9 @@
       <h4 class="modal-title">Cerca Per Utente</h4>
   </modal-header>
   <modal-body>
-      user
+      <div class="users homeList" *ngFor="let user of users">
+        <span class="itemHome" (click)="showDetailsUser(user);" >{{user}}</span>
+      </div>
   </modal-body>
   <modal-footer [show-default-buttons]="true"></modal-footer>
 </modal>
@@ -41,7 +43,9 @@
       <h4 class="modal-title">Cerca Per Prodotto</h4>
   </modal-header>
   <modal-body>
-      product
+      <div class="product homeList" *ngFor="let product of products">
+        <span class="itemHome" (click)="showDetailsProduct(product);" >{{product}}</span>
+      </div>
   </modal-body>
   <modal-footer [show-default-buttons]="true"></modal-footer>
 </modal>
@@ -51,7 +55,9 @@
       <h4 class="modal-title">Cerca Per Brand</h4>
   </modal-header>
   <modal-body>
-      brand
+      <div class="brand homeList" *ngFor="let brand of brands">
+        <span class="itemHome" (click)="showDetailsBrand(brand);" >{{brand}}</span>
+      </div>
   </modal-body>
   <modal-footer [show-default-buttons]="true"></modal-footer>
 </modal>

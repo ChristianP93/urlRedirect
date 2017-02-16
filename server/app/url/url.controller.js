@@ -7,7 +7,7 @@ const POSTGRES_INFO = process.env.POSTGRES_INFO;
 export class controllerUrl{
   static async create(req, res, next) {
     // http://127.0.0.1:3000/link?url=http://google.com&referId=user123654&gender=m&notaType=brand&vendorId=1&productId=null&acquiredIn=03/07/2016&geoInfo=Roma
-    // http://127.0.0.1:3000/link?url=http%3A%2F%2Fgoogle.com&referId=user123657&gender=m&notaType=brand&vendorId=1&productId=null&acquiredIn=03/07/2016&geoInfo=Roma
+    // http://127.0.0.1:3000/link?url=http%3A%2F%2Fgoogle.com&referId=user123657&gender=m&notaType=brand&vendorId=2&productId=1233522&acquiredIn=03/07/2016&geoInfo=Roma
 
      let results = [];
      let DateNow = new Date();
@@ -15,9 +15,7 @@ export class controllerUrl{
        res.status(400).json({'success': false, 'data': 'Missing url'});
        return next();
      }
-
      let url = req.query.url;
-
      pg.connect(POSTGRES_INFO, (err, client, done) => {
       if(err) {
         res.status(500).json({'success': false, 'data': err});
@@ -35,17 +33,51 @@ export class controllerUrl{
         return next();
       });
     });
+  }
 
+  static async getAllInfo(req, res, next){
+    // curl --request GET 'http://localhost:3000/api/v1/url/info/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+    let result = [];
+    pg.connect(POSTGRES_INFO, (err,client,done)=>{
+      if(err){
+        res.status(500).json({'success': false, 'data': err});
+        done();
+        return next();
+      };
+      const query = client.query('SELECT * FROM pg_url ORDER BY _id ASC');
+      query.on('row', (row) => {
+        result.push(row);
+      });
+      query.on('end', (row)=>{
+        let users = [];
+        let product = [];
+        let brand = [];
+        result.map((index, value) => {
+          if (users.indexOf(index.refer) == -1) {
+            if(index.refer == null) return;
+            users.push(index.refer);
+          };
+          if (product.indexOf(index.productid) == -1) {
+            if(!!!index.productid || index.productid == 'null') return;
+            product.push(index.productid);
+          };
+          if (brand.indexOf(index.vendorid) == -1) {
+            if(!!!index.vendorid || index.vendorid == 'null') return;
+            brand.push(index.vendorid);
+          };
+        });
+        res.status(200).json({'success': true,'users': users, 'product': product, 'brand': brand});
+        done();
+        return next();
+      });
+    });
   }
 
   static async readAll(req, res, next){
     // curl --request GET 'http://localhost:3000/api/v1/url/link/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
     // http://localhost:3000/api/v1/url/link/
     let result = [];
-    console.log('readALl');
     pg.connect(POSTGRES_INFO, (err,client,done)=>{
-      console.log('miao');
-
       if(err){
         res.status(500).json({'success': false, 'data': err});
         done();

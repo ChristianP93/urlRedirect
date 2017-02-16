@@ -33,6 +33,7 @@ app.get('/link', controllerUrl.create);
 app.get('/api/v1/url/link', auth.bearer(), controllerUrl.readAll);
 app.get('/api/v1/url/link/:urlId', auth.bearer(),controllerUrl.readSingle);
 app.get('/api/v1/url/userId/:userId', auth.bearer(),controllerUrl.getLinkByUser);
+app.get('/api/v1/url/info', auth.bearer(),controllerUrl.getAllInfo);
 app.get('/api/v1/url/product/:productId', auth.bearer(),controllerUrl.getLinkByProduct);
 app.get('/api/v1/url/brand/:vendorId', auth.bearer(),controllerUrl.getLinkByBrand);
 app.get('/api/v1/url/user/:userId/brand/:brandId', auth.bearer(),controllerUrl.getLinkByUserToBrand); //TODO function and test

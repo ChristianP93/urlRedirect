@@ -17,3 +17,11 @@
   position: absolute;
   margin-left: -45px;
 }
+
+.homeList{
+  text-align: center;
+}
+
+.itemHome{
+  cursor: pointer;
+}
