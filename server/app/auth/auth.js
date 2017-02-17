@@ -2,14 +2,10 @@
 
 import passport from 'passport'
 import Bearer from 'passport-http-bearer';
-import pg from "pg";
-import dotenv from 'dotenv';
+import { User } from './user.model.js';
 import bcrypt from 'bcrypt-nodejs';
 
-dotenv.load();
 const BearerStrategy = Bearer.Strategy;
-const POSTGRES_INFO = process.env.POSTGRES_INFO;
-
 
 var auth = {
   bearer: () => {
@@ -25,25 +21,10 @@ passport.use('bearer', new BearerStrategy(
       return next(null, false);
     }
 
-    pg.connect(POSTGRES_INFO, (err, client, done) => {
-      const query = client.query('SELECT * FROM users ORDER BY _id ASC');
-      query.on('row', (row) => {
-        if(row.token === accessToken ){
-          response = true;
-          user = row;
-        }
-      });
-
-      query.on('end', () => {
-        if (response) {
-          return next(null, user);
-        }else{
-          return next(null, false, {'message': 'Unknown user'});
-        }
-      });
+    User.findOne({'token': accessToken}, function(err, response){
+      return next(null, response);
     });
   }
 ));
-
 
 module.exports = auth;

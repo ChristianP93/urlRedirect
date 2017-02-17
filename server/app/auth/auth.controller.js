@@ -1,15 +1,10 @@
 'use strict';
-import pg from "pg";
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt-nodejs';
-
-dotenv.load();
-const POSTGRES_INFO = process.env.POSTGRES_INFO;
+import { User } from './user.model.js';
 
 export class controllerAuth{
-  // curl --request POST 'http://localhost:3000/api/v1//user/create/' -v
-
-  // curl --header "Content-Type: application/json" 'http://localhost:3000/user/create/' --data-binary '{"user": {"mail":"christianpengu@gmail.com","password":"miao"}}'
+   // curl --header "Content-Type: application/json" 'http://localhost:3000/user/create/' --data-binary '{"user": {"mail":"christianpengu@gmail.com","password":"miao"}}'
   static async createUser(req, res, next) {
    let possible = '0123456789QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm';
    let token = '';
@@ -22,36 +17,24 @@ export class controllerAuth{
    for (var i = 0; i < 15; i++) {
      token += possible.charAt(Math.floor(Math.random() * possible.length))
    }
-   pg.connect(POSTGRES_INFO, (err, client, done) => {
-     const query = client.query('SELECT * FROM users ORDER BY _id ASC');
-     query.on('row', (row) => {
-       if(row.mail === req.body.user.mail ){
-         result = 1;
-       }
-     });
 
-     query.on('end', ()=>{
-      if(result === 1){
-         res.status(409).json({'success': false, 'err': 'mail exist'});
-         return next();
-      }
+   User.find({'_id': req.body.user._id}, function(err, user){
+     if(user.mail === req.body.user.mail ){
+        res.status(409).json({'success': false, 'err': 'mail exist'});
+        return next();
+      };
       bcrypt.hash(req.body.user.password, null, null, function(err, password) {
-        pg.connect(POSTGRES_INFO, (err, client, done) => {
-         if(err) {
-           res.status(500).json({'success': false, 'data': err});
-           return next();
-         }
-
-         const querycreate = client.query('INSERT INTO users (mail, password, token) values($1, $2, $3)',
-         [ req.body.user.mail, password, token ]);
-
-         querycreate.on('end', () => {
-           res.status(201).json({'success': true, 'token': token});
-           return next();
-         });
-       });
+        let user = new User({'mail': req.body.user.mail, 'password': password, 'token': token});
+        user.save(function(err, user){
+          if(err) {
+            res.status(500).json({'success': false, 'data': err});
+            return next();
+          }
+          res.status(201).json({'success': true, 'token': token});
+          return next();
+        })
       });
-    });
+
    });
  };
 
@@ -64,20 +47,14 @@ export class controllerAuth{
       return next();
     }
 
-    pg.connect(POSTGRES_INFO, (err, client, done) => {
-      const query = client.query('SELECT * FROM users ORDER BY _id ASC');
-      query.on('row', (row) => {
-        if(row.mail === req.body.user.mail ){
-          response = bcrypt.compareSync(req.body.user.password, row.password);
-          token = row.token;
-        }
-      });
-
-      query.on('end', () => {
-        response === true ? res.status(200).json({'success': true, 'token': token}) : res.status(400).json({'success': false, 'response': 'wrong password'});
-        return next();
-      });
+    return User.findOne({'_id': req.body.user._id}, function(err, response){
+      console.log(response);
+      if(response.mail === req.body.user.mail ){
+        res = bcrypt.compareSync(req.body.user.password, response.password);
+        token = response.token;
+      }
+      res === true ? res.status(200).json({'success': true, 'token': token}) : res.status(400).json({'success': false, 'response': 'wrong password'});
+      return next();
     });
   };
-
 }

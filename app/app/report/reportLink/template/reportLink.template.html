@@ -3,30 +3,30 @@
     <thead>
       <tr>
         <th class="rowTableReportLink">_id</th>
-        <th class="rowTableReportLink">refer</th>
+        <th class="rowTableReportLink">userId</th>
         <th class="rowTableReportLink">created</th>
         <th class="rowTableReportLink">url</th>
         <th class="rowTableReportLink">gender</th>
         <th class="rowTableReportLink">notatype</th>
-        <th class="rowTableReportLink">acquiredIn</th>
+        <th class="rowTableReportLink">acquired</th>
         <th class="rowTableReportLink">geoinfo</th>
         <th class="rowTableReportLink">vendorId</th>
         <th class="rowTableReportLink">productId</th>
       </tr>
     </thead>
     <tbody>
-      <!-- <tr class="cursorPointer" *ngFor='let report of (reports | noRepeat)' (click)="showDetails(report.refer)"> -->
+      <!-- <tr class="cursorPointer" *ngFor='let report of (reports | noRepeat)' (click)="showDetails(report.userId)"> -->
       <tr class="cursorPointer" *ngFor='let report of reports' (click)="showDetails()">
         <td class="rowTableReportLink">{{report._id}} </td>
-        <td class="rowTableReportLink">{{report.refer}} </td>
+        <td class="rowTableReportLink">{{report.userId}} </td>
         <td class="rowTableReportLink">{{report.created | date: 'dd/MM/yyyy'}} </td>
         <td class="rowTableReportLink">{{report.url}} </td>
         <td class="rowTableReportLink">{{report.gender}} </td>
         <td class="rowTableReportLink">{{report.notatype}} </td>
-        <td class="rowTableReportLink">{{report.acquiredIn | date: 'dd/MM/yyyy'}} </td>
+        <td class="rowTableReportLink">{{report.acquired | date: 'dd/MM/yyyy'}} </td>
         <td class="rowTableReportLink">{{report.geoinfo}} </td>
-        <td class="rowTableReportLink">{{report.vendorid}} </td>
-        <td class="rowTableReportLink">{{report.productid}} </td>
+        <td class="rowTableReportLink">{{report.vendorId}} </td>
+        <td class="rowTableReportLink">{{report.productId}} </td>
       </tr>
     </tbody>
   </table>

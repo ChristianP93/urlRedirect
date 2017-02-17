@@ -54,12 +54,12 @@ export class BarChartDemoComponent implements OnInit {
         if (this.allDataUsers.length === 0) { return; };
         let counter: number;
         this.allDataUsers.map((index: any, value: number) => {
-            if (this.reports.hasOwnProperty(index.refer)) {
-                this.reports[index.refer].counter.push(index.url);
+            if (this.reports.hasOwnProperty(index.userId)) {
+                this.reports[index.userId].counter.push(index.url);
                 counter++;
             } else {
-                this.reports[index.refer] = { counter: [index.url] };
-                this.users.push(this.allDataUsers.splice(value, 1)[0].refer);
+                this.reports[index.userId] = { counter: [index.url] };
+                this.users.push(this.allDataUsers.splice(value, 1)[0].userId);
                 counter++;
             }
         });
@@ -72,8 +72,8 @@ export class BarChartDemoComponent implements OnInit {
             this.polarAreaChartData.push(parseInt(this.reports[index].counter.length, 10));
             this.polarAreaChartLabels.push(index);
         });
+        console.log(this.reports);
+        console.log(this.users);
         this.graph = true;
     }
-
-
 }

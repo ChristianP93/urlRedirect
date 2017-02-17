@@ -1,139 +1,103 @@
-import pg from "pg";
-import dotenv from 'dotenv';
-dotenv.load();
-
-const POSTGRES_INFO = process.env.POSTGRES_INFO;
-
+import { Url } from './url.model.js';
 export class controllerUrl{
   static async create(req, res, next) {
-    // http://127.0.0.1:3000/link?url=http://google.com&referId=user123654&gender=m&notaType=brand&vendorId=1&productId=null&acquiredIn=03/07/2016&geoInfo=Roma
-    // http://127.0.0.1:3000/link?url=http%3A%2F%2Fgoogle.com&referId=user123657&gender=m&notaType=brand&vendorId=2&productId=1233522&acquiredIn=03/07/2016&geoInfo=Roma
+    // http://127.0.0.1:3000/link?url=http://google.com&userId=user123654&gender=m&notaType=null&notification=idnotifica&vendorId=1&productId=null&acquired=03/07/2016&geoInfo=Roma
+    // http://127.0.0.1:3000/link?url=http%3A%2F%2Fgoogle.com&userId=user123657&gender=m&notaType=banner&notification=null&vendorId=2&productId=1233522&acquired=03/07/2016&geoInfo=Roma
+    if (!!!req.query.url) {
+      res.status(400).json({'success': false, 'data': 'Missing url'});
+      return next();
+    }
 
-     let results = [];
-     let DateNow = new Date();
-     if (!!!req.query.url) {
-       res.status(400).json({'success': false, 'data': 'Missing url'});
-       return next();
-     }
-     let url = req.query.url;
-     pg.connect(POSTGRES_INFO, (err, client, done) => {
-      if(err) {
-        res.status(500).json({'success': false, 'data': err});
+    let url = new Url({userId: req.query.userId, created: new Date(),
+      url: req.query.url, gender: req.query.gender, notatype: req.query.notaType,
+      notification: req.query.notification, acquired: req.query.acquired, geoinfo: req.query.geoInfo,
+      vendorId: req.query.vendorId, productId: req.query.productId
+    });
+
+    url.save((err, url)=>{
+      if(err){
+        res.status(400).json({'success': false, 'data': err.toString()});
         return next();
       }
-      const query = client.query('INSERT INTO pg_url(refer, created, url, gender, notatype, acquiredIn, geoinfo, vendorId, productId) values($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-      [ req.query.referId, DateNow, url, req.query.gender, req.query.notaType, req.query.acquiredIn, req.query.geoInfo, req.query.vendorId, req.query.productId]);
-      query.on('row', (row) => {
-        results.push(row);
-      });
-      query.on('end', () => {
-        res.status(302).redirect(url);
-        done();
 
-        return next();
-      });
+      res.status(302).redirect(url.url);
+      return next();
     });
   }
 
   static async getAllInfo(req, res, next){
-    // curl --request GET 'http://localhost:3000/api/v1/url/info/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
-    let result = [];
-    pg.connect(POSTGRES_INFO, (err,client,done)=>{
+      // curl --request GET 'http://localhost:3000/api/v1/url/info/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+    return Url.find(function(err, result){
       if(err){
-        res.status(500).json({'success': false, 'data': err});
-        done();
+        res.status(500).json({'success': false,'result': 'Error find'});
         return next();
-      };
-      const query = client.query('SELECT * FROM pg_url ORDER BY _id ASC');
-      query.on('row', (row) => {
-        result.push(row);
-      });
-      query.on('end', (row)=>{
-        let users = [];
-        let product = [];
-        let brand = [];
-        result.map((index, value) => {
-          if (users.indexOf(index.refer) == -1) {
-            if(index.refer == null) return;
-            users.push(index.refer);
-          };
-          if (product.indexOf(index.productid) == -1) {
-            if(!!!index.productid || index.productid == 'null') return;
-            product.push(index.productid);
-          };
-          if (brand.indexOf(index.vendorid) == -1) {
-            if(!!!index.vendorid || index.vendorid == 'null') return;
-            brand.push(index.vendorid);
-          };
-        });
-        res.status(200).json({'success': true,'users': users, 'product': product, 'brand': brand});
-        done();
+      }
+      if(result === undefined){
+        res.status(404).json({'success': false,'result': []});
         return next();
+      }
+      let users = [];
+      let product = [];
+      let brand = [];
+      result.map((index, value) => {
+        if (users.indexOf(index.userId) == -1) {
+          users.push(index.userId);
+        };
+        if (product.indexOf(index.productId) == -1) {
+          if(index.productId != 'null') product.push(index.productId);
+        };
+        if (brand.indexOf(index.vendorId) == -1) {
+          if(index.vendorId != 'null') brand.push(index.vendorId);
+        };
       });
+      res.status(200).json({'success': true,'users': users, 'product': product, 'brand': brand});
+      return next();
     });
   }
 
   static async readAll(req, res, next){
-    // curl --request GET 'http://localhost:3000/api/v1/url/link/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
-    // http://localhost:3000/api/v1/url/link/
-    let result = [];
-    pg.connect(POSTGRES_INFO, (err,client,done)=>{
+  // curl --request GET 'http://localhost:3000/api/v1/url/link/' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+    return Url.find(function(err, result){
       if(err){
-        res.status(500).json({'success': false, 'data': err});
-        done();
+        res.status(500).json({'success': false,'result': 'Error find'});
         return next();
-      };
-      const query = client.query('SELECT * FROM pg_url ORDER BY _id ASC');
-      query.on('row', (row) => {
-        result.push(row);
-      });
-      query.on('end', (row)=>{
-        res.status(200).json({'success': true,'result': result});
-        done();
+      }
+      if(result === undefined){
+        res.status(404).json({'success': false,'result': []});
         return next();
-      });
+      }
+      res.status(200).json({'success': true,'result': result});
+      return next();
+
     });
   }
 
   static async readSingle(req, res, next){
-    // curl --request GET 'http://localhost:3000/api/v1/url/link/185' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
-    // http://localhost:3000/api/v1/url/link/185
-    let result = [];
+    // curl --request GET 'http://localhost:3000/api/v1/url/link/58a6d3a8df26b727eb5f1088' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
     if (!!!req.params.urlId){
       res.status(400).json({'success': false,'error': 'Missing id'});
       return next();
-     }
+    }
 
      let urlId = [req.params.urlId];
 
-     pg.connect(POSTGRES_INFO, (err, client, done)=>{
+     return Url.findOne({'_id': urlId}, function(err, result){
        if(err){
-         res.status(500).json({'success':false, 'data':err});
-         done();
+         res.status(500).json({'success': false,'result': 'Error find'});
          return next();
-       };
-
-     const query=client.query('SELECT * FROM pg_url WHERE _id=($1)', urlId);
-       query.on('row', (row)=>{
-         result.push(row);
-       });
-       query.on('end', (row)=>{
-         if(row.rowCount === 0) {
-           res.status(404).json({'success': false,'result': []});
-           done();
-           return next();
-         }
-         res.status(201).json({'success': true,'result': result});
-         done();
+       }
+       if(result === undefined){
+         res.status(404).json({'success': false,'result': []});
          return next();
-       });
+       }
+       res.status(201).json({'success': true,'result': result});
+       return next();
      });
-
-   }
+   };
 
    static async getLinkByUser(req, res, next){
     //  user123654
-     // curl --request GET 'http://localhost:3000/api/v1/url/userId/user123456' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+     // curl --request GET 'http://localhost:3000/api/v1/url/userId/user123654' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
      let result = [];
      if (!!!req.params.userId){
        res.status(400).json({'success': false,'error': 'Missing userId'});
@@ -141,109 +105,78 @@ export class controllerUrl{
       }
 
       let usrId = req.params.userId;
-
-      pg.connect(POSTGRES_INFO, (err, client, done)=>{
+      return Url.find({'userId': usrId}, function(err, result){
         if(err){
-          res.status(500).json({'success':false, 'data':err});
-          done();
+          res.status(500).json({'success': false,'result': 'Error find'});
           return next();
-        };
-
-      const query=client.query('SELECT * FROM pg_url WHERE refer=($1)', [usrId]);
-        query.on('row', (row)=>{
-          result.push(row);
-        });
-        query.on('end', (row)=>{
-          if(row.rowCount === 0) {
-            res.status(404).json({'success': false,'result': []});
-            done();
-            return next();
-          }
-          res.status(201).json({'success': true, "result": result});
-          done();
+        }
+        if(result === undefined){
+          res.status(404).json({'success': false,'result': []});
           return next();
-        });
-      });
+        }
+        res.status(201).json({'success': true,'result': result});
+        return next();
+      })
     }
 
     static async getLinkByProduct (req, res, next){
       //http://localhost:3000/api/v1/url/product/123456
-      // curl --request GET 'http://localhost:3000/api/v1/url/product/123456' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
-      let result = [];
-      if (!!!req.params.productId){
-        res.status(400).json({'success': false,'error': 'Missing productId'});
-         return next();
-       }
-      pg.connect(POSTGRES_INFO, (err, client,done)=>{
+      // curl --request GET 'http://localhost:3000/api/v1/url/product/1233522' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+     if (!!!req.params.productId){
+       res.status(400).json({'success': false,'error': 'Missing productId'});
+        return next();
+      }
+
+      let productId = req.params.productId;
+      return Url.find({'productId': productId}, function(err, result){
         if(err){
-          res.status(500).json({'success':false, 'data':err});
-          done();
+          res.status(500).json({'success': false,'result': 'Error find'});
           return next();
-        };
-
-        const query = client.query('SELECT * FROM pg_url WHERE productId=($1)', [req.params.productId]);
-        query.on('row', (row)=>{
-          result.push(row);
-        });
-
-        query.on('end', (row)=>{
-          if(row.rowCount === 0) {
-            res.status(404).json({'success': false,'result': []});
-            done();
-            return next();
-          }
-          res.status(201).json({'success': true, 'result': result})
-          done();
+        }
+        if(result === undefined){
+          res.status(404).json({'success': false,'result': []});
           return next();
-        });
+        }
+        res.status(201).json({'success': true,'result': result});
+        return next();
       });
     }
 
     static async getLinkByBrand (req, res, next){
       //http://localhost:3000/api/v1/url/brand/123456745855885
-      // curl --request GET 'http://localhost:3000/api/v1/url/brand/123456745855885' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
-
-      let result = [];
+      // curl --request GET 'http://localhost:3000/api/v1/url/brand/1' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
       if (!!!req.params.vendorId){
-        res.status(400).json({'success': false,'error': 'Missing brand'});
-         return next();
-       }
-      pg.connect(POSTGRES_INFO, (err, client,done)=>{
-        if(err){
-          res.status(500).json({'success':false, 'data':err});
-          done();
-          return next();
-        };
+       res.status(400).json({'success': false,'error': 'Missing vendorId'});
+        return next();
+      }
 
-        const query = client.query('SELECT * FROM pg_url WHERE vendorId=($1)', [req.params.vendorId]);
-        query.on('row', (row)=>{
-          result.push(row);
-        });
-        query.on('end', (row)=>{
-          if(row.rowCount === 0) {
-            res.status(404).json({'success': false,'result': []});
-            done();
-            return next();
-          }
-          res.status(201).json({'success': true, 'result': result})
-          done();
+      let vendorId = req.params.vendorId;
+      return Url.find({'vendorId': vendorId}, function(err, result){
+        if(err){
+          res.status(500).json({'success': false,'result': 'Error find'});
           return next();
-        });
+        }
+        if(result === undefined){
+          res.status(404).json({'success': false,'result': []});
+          return next();
+        }
+        res.status(201).json({'success': true,'result': result});
+        return next();
       });
     }
-
-    static async getLinkByUserToBrand (req, res, next){
-      //http://localhost:3000/api/v1/url/user/user123652/brand/123456745855885
-      // curl --request GET 'http://localhost:3000/api/v1/url/user/user123652/brand/123456745855885' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
-
-      next();
-    }
-
-    static async getLinkByUserByProduct (req, res, next){
-      //http://localhost:3000/api/v1/url/user/:userId/product/:productId
-      // curl --request GET 'http://localhost:3000/api/v1/url/user/user123652/:productId' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
-
-      next();
-    }
+  //
+  //   static async getLinkByUserToBrand (req, res, next){
+  //     //http://localhost:3000/api/v1/url/user/user123652/brand/123456745855885
+  //     // curl --request GET 'http://localhost:3000/api/v1/url/user/user123652/brand/123456745855885' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+  //
+  //     next();
+  //   }
+  //
+  //   static async getLinkByUserByProduct (req, res, next){
+  //     //http://localhost:3000/api/v1/url/user/:userId/product/:productId
+  //     // curl --request GET 'http://localhost:3000/api/v1/url/user/user123652/:productId' -H 'Authorization: Bearer 2NhQz3AyhnbWex8' -v
+  //
+  //     next();
+  //   }
 
 }
