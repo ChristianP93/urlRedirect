@@ -18,5 +18,5 @@ run server:
 npm start;
 
 
-In root folder create a file .env with connection string to Postgresql
-POSTGRES_INFO = postgres://[user]:[pwd]@[host]:[port]/[dbName]
+In root folder create a file .env with connection string to MongoDB
+MONGO_INFO = mongodb://[username:password@]host1[:port1][/[database]]
